@@ -18,31 +18,18 @@ def show_banks(user):
     for bank_tuple in user ['connected_banks']:
         print(f"Your connected bank, " + f'{bank_tuple[0]}' + f", has a balance of " + f'{bank_tuple[1]}')
 
-def select_bank():
-    pass
-
 def check_account_bal(user1,user2):
     xfer_amount = input("How much would you like to transfer? Please enter a whole dollar amount. ")
     amount_to_check = int(xfer_amount)
     if amount_to_check > ((user1)['account_balance']):
-        print(f"You don't have enough in your account. Your account balance is " + f"{(user1)['account_balance']}.") # Bonus code: + f"Please choose a connected bank to fund your account first.")
-        # Bonus code: select_bank(user)
+        print(f"You don't have enough in your account. Your account balance is " + f"{(user1)['account_balance']}.")
+        select_bank(user1)
+        
     else:
         user1['account_balance'] = (((user1)['account_balance']) - amount_to_check)
         user2['account_balance'] = (((user2)['account_balance']) + amount_to_check)
         print(f"Your transfer was successful! Your account balance is now " + f"{(user1)['account_balance']}.")
         complete_xfer(user1, user2)
-
-###
-# Ask user_one if they would like to transfer money to user_two.
-# If not, end the program.
-# Ask user_one how much money they would like to transfer.
-# If insufficient balance, re-prompt and print balance of account
-# Add the transferred amount to user_two balance.
-# Display the new balance of user_one’s account.
-# Ask if the user would like to make another transfer.
-# If yes, repeat the entire sequence.
-# If not, print the final account balance of user_one and exit.
 
 def confirm_xfer(user1, user2):
     start_xfer = input(f"Would you like to make a transfer to " + f"{(user2)['full_name']}" + f"? (Y/N)")
@@ -59,7 +46,27 @@ def complete_xfer(user1, user2):
         print("Your final balance is " + f"{(user1)['account_balance']}.")
         print("Goodbye!")
 
-def update_account_balances():
-    pass
+
+def select_bank(user):
+    bank_xfer = input("Would you like to transfer funds from a connected bank? (Y/N) ")
+    if bank_xfer == 'Y':
+        xfer_from_account = input(f"Please select your connected bank" + f"{(user)['connected_banks'][0][0]}" + f" or {(user)['connected_banks'][1][0]}")
+        if xfer_from_account == user['connected_banks'][0][0]:
+            amount_to_xfer = input('How much would you like to transfer from the selected account? Please enter a full dollar amount. ')
+            funds_from_bank = int(amount_to_xfer)
+            (user)['account_balance'] = (((user)['account_balance']) + funds_from_bank)                
+            ((user)['connected_banks'][0][1]) = (((user)['connected_banks'][0][1]) - funds_from_bank)
+            print (f"Your transfer was successful! Your account balance is now " + f"{user['account_balance']}. " + "Your connected bank, " + f"{(user)['connected_banks'][0][0]}" + f", has a balance of " + f"{(user)['connected_banks'][0][1]}")
+        elif xfer_from_account == (user)['connected_banks'][1][0]:
+            amount_to_xfer = input('How much would you like to transfer from the selected account? Please enter a full dollar amount. ')
+            funds_from_bank = int(amount_to_xfer)
+            user['account_balance'] = (((user)['account_balance']) + funds_from_bank)
+            user['connected_banks'][1][1] = (((user)['connected_banks'][1][1]) - funds_from_bank)
+            print (f"Your transfer was successful! Your account balance is now " + f"{user['account_balance']}. " + "Your connected bank, " + f"{(user)['connected_banks'][1][0]}" + f", has a balance of " + f"{(user)['connected_banks'][1][1]}")
+        else:
+            print('Sorry, that is not one of your connected banks. Goodbye!')
+    else:
+        print('OK. Goodbye!')
+            
 
 
