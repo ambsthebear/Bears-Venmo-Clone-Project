@@ -23,7 +23,7 @@ def check_account_bal(user1,user2):
     amount_to_check = int(xfer_amount)
     if amount_to_check > ((user1)['account_balance']):
         print(f"You don't have enough in your account. Your account balance is " + f"{(user1)['account_balance']}.")
-        select_bank(user1)
+        fund_account(user1)
         
     else:
         user1['account_balance'] = (((user1)['account_balance']) - amount_to_check)
@@ -47,26 +47,31 @@ def complete_xfer(user1, user2):
         print("Goodbye!")
 
 
-def select_bank(user):
+def fund_account(user):
     bank_xfer = input("Would you like to transfer funds from a connected bank? (Y/N) ")
     if bank_xfer == 'Y':
-        xfer_from_account = input(f"Please select your connected bank" + f"{(user)['connected_banks'][0][0]}" + f" or {(user)['connected_banks'][1][0]}")
-        if xfer_from_account == user['connected_banks'][0][0]:
-            amount_to_xfer = input('How much would you like to transfer from the selected account? Please enter a full dollar amount. ')
-            funds_from_bank = int(amount_to_xfer)
-            (user)['account_balance'] = (((user)['account_balance']) + funds_from_bank)                
-            ((user)['connected_banks'][0][1]) = (((user)['connected_banks'][0][1]) - funds_from_bank)
-            print (f"Your transfer was successful! Your account balance is now " + f"{user['account_balance']}. " + "Your connected bank, " + f"{(user)['connected_banks'][0][0]}" + f", has a balance of " + f"{(user)['connected_banks'][0][1]}")
-        elif xfer_from_account == (user)['connected_banks'][1][0]:
-            amount_to_xfer = input('How much would you like to transfer from the selected account? Please enter a full dollar amount. ')
-            funds_from_bank = int(amount_to_xfer)
-            user['account_balance'] = (((user)['account_balance']) + funds_from_bank)
-            user['connected_banks'][1][1] = (((user)['connected_banks'][1][1]) - funds_from_bank)
-            print (f"Your transfer was successful! Your account balance is now " + f"{user['account_balance']}. " + "Your connected bank, " + f"{(user)['connected_banks'][1][0]}" + f", has a balance of " + f"{(user)['connected_banks'][1][1]}")
-        else:
-            print('Sorry, that is not one of your connected banks. Goodbye!')
+        xfer_funds(user)
     else:
         print('OK. Goodbye!')
             
 
-
+def xfer_funds(user):
+    xfer_from_account = input(f"Please select your connected bank, " + f"{(user)['connected_banks'][0][0]}" + f" or {(user)['connected_banks'][1][0]}. ")
+    if xfer_from_account == (user['connected_banks'][0][0]):
+        amount_to_xfer = input('How much would you like to transfer from the selected account? Please enter a full dollar amount. ')
+        funds_from_bank = int(amount_to_xfer)
+        user['account_balance'] = (((user)['account_balance']) + funds_from_bank)                
+        temp_bank_and_balance = list((user)['connected_banks'][0])
+        temp_bank_and_balance[1] = (temp_bank_and_balance[1]) - funds_from_bank
+        user['connected_banks'][0] = tuple(temp_bank_and_balance)
+        print (f"Your transfer was successful! Your account balance is now " + f"{user['account_balance']}. " + "Your connected bank, " + f"{(user)['connected_banks'][0][0]}" + f", has a balance of " + f"{(user)['connected_banks'][0][1]}")
+    elif xfer_from_account == (user)['connected_banks'][1][0]:
+        amount_to_xfer = input('How much would you like to transfer from the selected account? Please enter a full dollar amount. ')
+        funds_from_bank = int(amount_to_xfer)
+        user['account_balance'] = (((user)['account_balance']) + funds_from_bank)
+        temp_bank_and_balance = list((user)['connected_banks'][1])
+        temp_bank_and_balance[1] = (temp_bank_and_balance[1]) - funds_from_bank
+        user['connected_banks'][1] = tuple(temp_bank_and_balance)
+        print (f"Your transfer was successful! Your account balance is now " + f"{user['account_balance']}. " + "Your connected bank, " + f"{(user)['connected_banks'][1][0]}" + f", has a balance of " + f"{(user)['connected_banks'][1][1]}")
+    else:
+        print('Sorry, that is not one of your connected banks. Goodbye!')
