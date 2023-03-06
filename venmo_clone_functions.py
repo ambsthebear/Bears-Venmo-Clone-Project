@@ -23,7 +23,7 @@ def check_account_bal(user1,user2):
     amount_to_check = int(xfer_amount)
     if amount_to_check > ((user1)['account_balance']):
         print(f"You don't have enough in your account. Your account balance is " + f"{(user1)['account_balance']}.")
-        fund_account(user1)
+        fund_account(user1, user2)
         
     else:
         user1['account_balance'] = (((user1)['account_balance']) - amount_to_check)
@@ -47,10 +47,11 @@ def complete_xfer(user1, user2):
         print("Goodbye!")
 
 
-def fund_account(user):
+def fund_account(user1, user2):
     bank_xfer = input("Would you like to transfer funds from a connected bank? (Y/N) ")
     if bank_xfer == 'Y':
-        xfer_funds(user)
+        xfer_funds(user1)
+        confirm_xfer(user1, user2)
     else:
         print('OK. Goodbye!')
             
